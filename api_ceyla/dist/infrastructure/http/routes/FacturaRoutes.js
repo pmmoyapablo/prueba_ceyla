@@ -1,17 +1,16 @@
-import { Router } from 'express';
-import { FacturaController } from '../controllers/FacturaController';
-import { Injector } from '../../injections/Injector';
-import { IFacturaRepository } from '../../../domain/repositories/IFacturaRepository';
-import { FacturaService } from '../../../application/services/FacturaService';
-
-const router = Router();
-const injector = Injector.getInstance();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const FacturaController_1 = require("../controllers/FacturaController");
+const Injector_1 = require("../../injections/Injector");
+const FacturaService_1 = require("../../../application/services/FacturaService");
+const router = (0, express_1.Router)();
+const injector = Injector_1.Injector.getInstance();
 const adapter = process.env.ADAPTER || 'mysql';
 injector.setAdapters(adapter);
-const facturaRepository = injector.resolve<IFacturaRepository>('facturaRepository');
-const facturaService = new FacturaService(facturaRepository);
-const facturaController = new FacturaController(facturaService);
-
+const facturaRepository = injector.resolve('facturaRepository');
+const facturaService = new FacturaService_1.FacturaService(facturaRepository);
+const facturaController = new FacturaController_1.FacturaController(facturaService);
 /**
  * @swagger
  * /api/facturas:
@@ -29,7 +28,6 @@ const facturaController = new FacturaController(facturaService);
  *                 $ref: '#/components/schemas/Factura'
  */
 router.get('/', facturaController.getFacturas.bind(facturaController));
-
 /**
  * @swagger
  * /api/facturas/{id}:
@@ -54,7 +52,6 @@ router.get('/', facturaController.getFacturas.bind(facturaController));
  *         description: Factura no encontrada
  */
 router.get('/:id', facturaController.getFacturaById.bind(facturaController));
-
 /**
  * @swagger
  * /api/facturas:
@@ -78,7 +75,6 @@ router.get('/:id', facturaController.getFacturaById.bind(facturaController));
  *         description: Datos inválidos
  */
 router.post('/', facturaController.createFactura.bind(facturaController));
-
 /**
  * @swagger
  * /api/facturas/{id}:
@@ -109,7 +105,6 @@ router.post('/', facturaController.createFactura.bind(facturaController));
  *         description: Factura no encontrada
  */
 router.put('/:id', facturaController.updateFactura.bind(facturaController));
-
 /**
  * @swagger
  * /api/facturas/{id}:
@@ -130,5 +125,4 @@ router.put('/:id', facturaController.updateFactura.bind(facturaController));
  *         description: Factura no encontrada
  */
 router.delete('/:id', facturaController.deleteFactura.bind(facturaController));
-
-export default router; 
+exports.default = router;

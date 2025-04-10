@@ -1,17 +1,16 @@
-import { Router } from 'express';
-import { Injector } from '../../injections/Injector';
-import { IEquipoRepository } from '../../../domain/repositories/IEquipoRepository';
-import { EquipoService } from '../../../application/services/EquipoService';
-import { EquipoController } from '../controllers/EquipoController';
-
-const router = Router();
-const injector = Injector.getInstance();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const Injector_1 = require("../../injections/Injector");
+const EquipoService_1 = require("../../../application/services/EquipoService");
+const EquipoController_1 = require("../controllers/EquipoController");
+const router = (0, express_1.Router)();
+const injector = Injector_1.Injector.getInstance();
 const adapter = process.env.ADAPTER || 'mysql';
 injector.setAdapters(adapter);
-const equipoRepository = injector.resolve<IEquipoRepository>('equipoRepository');
-const equipoService = new EquipoService(equipoRepository);
-const equipoController = new EquipoController(equipoService);
-
+const equipoRepository = injector.resolve('equipoRepository');
+const equipoService = new EquipoService_1.EquipoService(equipoRepository);
+const equipoController = new EquipoController_1.EquipoController(equipoService);
 /**
  * @swagger
  * /api/equipos:
@@ -29,7 +28,6 @@ const equipoController = new EquipoController(equipoService);
  *                 $ref: '#/components/schemas/Equipo'
  */
 router.get('/', equipoController.getEquipos.bind(equipoController));
-
 /**
  * @swagger
  * /api/equipos/{id}:
@@ -54,7 +52,6 @@ router.get('/', equipoController.getEquipos.bind(equipoController));
  *         description: Equipo no encontrado
  */
 router.get('/:id', equipoController.getEquipoById.bind(equipoController));
-
 /**
  * @swagger
  * /api/equipos:
@@ -78,7 +75,6 @@ router.get('/:id', equipoController.getEquipoById.bind(equipoController));
  *         description: Datos inválidos
  */
 router.post('/', equipoController.createEquipo.bind(equipoController));
-
 /**
  * @swagger
  * /api/equipos/{id}:
@@ -109,7 +105,6 @@ router.post('/', equipoController.createEquipo.bind(equipoController));
  *         description: Equipo no encontrado
  */
 router.put('/:id', equipoController.updateEquipo.bind(equipoController));
-
 /**
  * @swagger
  * /api/equipos/{id}:
@@ -130,5 +125,4 @@ router.put('/:id', equipoController.updateEquipo.bind(equipoController));
  *         description: Equipo no encontrado
  */
 router.delete('/:id', equipoController.deleteEquipo.bind(equipoController));
-
-export default router; 
+exports.default = router;

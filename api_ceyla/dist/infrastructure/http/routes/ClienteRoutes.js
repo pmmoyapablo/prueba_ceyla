@@ -1,17 +1,16 @@
-import { Router } from 'express';
-import { ClienteController } from '../controllers/ClienteController';
-import { Injector } from '../../injections/Injector';
-import { IClienteRepository } from '../../../domain/repositories/IClienteRepository';
-import { ClienteService } from '../../../application/services/ClienteService';
-
-const router = Router();
-const injector = Injector.getInstance();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const ClienteController_1 = require("../controllers/ClienteController");
+const Injector_1 = require("../../injections/Injector");
+const ClienteService_1 = require("../../../application/services/ClienteService");
+const router = (0, express_1.Router)();
+const injector = Injector_1.Injector.getInstance();
 const adapter = process.env.ADAPTER || 'mysql';
 injector.setAdapters(adapter);
-const clienteRepository = injector.resolve<IClienteRepository>('clienteRepository');
-const clienteService = new ClienteService(clienteRepository);
-const clienteController = new ClienteController(clienteService);
-
+const clienteRepository = injector.resolve('clienteRepository');
+const clienteService = new ClienteService_1.ClienteService(clienteRepository);
+const clienteController = new ClienteController_1.ClienteController(clienteService);
 /**
  * @swagger
  * /api/clientes:
@@ -29,7 +28,6 @@ const clienteController = new ClienteController(clienteService);
  *                 $ref: '#/components/schemas/Cliente'
  */
 router.get('/', clienteController.getClientes.bind(clienteController));
-
 /**
  * @swagger
  * /api/clientes/email/{email}:
@@ -55,7 +53,6 @@ router.get('/', clienteController.getClientes.bind(clienteController));
  *         description: Cliente no encontrado
  */
 router.get('/email/:email', clienteController.getClienteByEmail.bind(clienteController));
-
 /**
  * @swagger
  * /api/clientes/numeroDocumento/{numeroDocumento}:
@@ -80,7 +77,6 @@ router.get('/email/:email', clienteController.getClienteByEmail.bind(clienteCont
  *         description: Cliente no encontrado
  */
 router.get('/numeroDocumento/:numeroDocumento', clienteController.getClienteByNumeroDocumento.bind(clienteController));
-
 /**
  * @swagger
  * /api/clientes/{id}:
@@ -105,7 +101,6 @@ router.get('/numeroDocumento/:numeroDocumento', clienteController.getClienteByNu
  *         description: Cliente no encontrado
  */
 router.get('/:id', clienteController.getClienteById.bind(clienteController));
-
 /**
  * @swagger
  * /api/clientes:
@@ -129,7 +124,6 @@ router.get('/:id', clienteController.getClienteById.bind(clienteController));
  *         description: Datos inválidos
  */
 router.post('/', clienteController.createCliente.bind(clienteController));
-
 /**
  * @swagger
  * /api/clientes/{id}:
@@ -160,7 +154,6 @@ router.post('/', clienteController.createCliente.bind(clienteController));
  *         description: Cliente no encontrado
  */
 router.put('/:id', clienteController.updateCliente.bind(clienteController));
-
 /**
  * @swagger
  * /api/clientes/{id}:
@@ -181,5 +174,4 @@ router.put('/:id', clienteController.updateCliente.bind(clienteController));
  *         description: Cliente no encontrado
  */
 router.delete('/:id', clienteController.deleteCliente.bind(clienteController));
-
-export default router;
+exports.default = router;

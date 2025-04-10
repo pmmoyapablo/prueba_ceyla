@@ -1,17 +1,16 @@
-import { Router } from 'express';
-import { Injector } from '../../injections/Injector';
-import { INegocioRepository } from '../../../domain/repositories/INegocioRepository';
-import { NegocioService } from '../../../application/services/NegocioService';
-import { NegocioController } from '../controllers/NegocioController';
-
-const router = Router();
-const injector = Injector.getInstance();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const Injector_1 = require("../../injections/Injector");
+const NegocioService_1 = require("../../../application/services/NegocioService");
+const NegocioController_1 = require("../controllers/NegocioController");
+const router = (0, express_1.Router)();
+const injector = Injector_1.Injector.getInstance();
 const adapter = process.env.ADAPTER || 'mysql';
 injector.setAdapters(adapter);
-const negocioRepository = injector.resolve<INegocioRepository>('negocioRepository');
-const negocioService = new NegocioService(negocioRepository);
-const negocioController = new NegocioController(negocioService);
-
+const negocioRepository = injector.resolve('negocioRepository');
+const negocioService = new NegocioService_1.NegocioService(negocioRepository);
+const negocioController = new NegocioController_1.NegocioController(negocioService);
 /**
  * @swagger
  * /api/negocios:
@@ -29,7 +28,6 @@ const negocioController = new NegocioController(negocioService);
  *                 $ref: '#/components/schemas/Negocio'
  */
 router.get('/', negocioController.getNegocios.bind(negocioController));
-
 /**
  * @swagger
  * /api/negocios/{id}:
@@ -54,7 +52,6 @@ router.get('/', negocioController.getNegocios.bind(negocioController));
  *         description: Negocio no encontrado
  */
 router.get('/:id', negocioController.getNegocioById.bind(negocioController));
-
 /**
  * @swagger
  * /api/negocios:
@@ -78,7 +75,6 @@ router.get('/:id', negocioController.getNegocioById.bind(negocioController));
  *         description: Datos inválidos
  */
 router.post('/', negocioController.createNegocio.bind(negocioController));
-
 /**
  * @swagger
  * /api/negocios/{id}:
@@ -109,7 +105,6 @@ router.post('/', negocioController.createNegocio.bind(negocioController));
  *         description: Negocio no encontrado
  */
 router.put('/:id', negocioController.updateNegocio.bind(negocioController));
-
 /**
  * @swagger
  * /api/negocios/{id}:
@@ -130,5 +125,4 @@ router.put('/:id', negocioController.updateNegocio.bind(negocioController));
  *         description: Negocio no encontrado
  */
 router.delete('/:id', negocioController.deleteNegocio.bind(negocioController));
-
-export default router; 
+exports.default = router;
