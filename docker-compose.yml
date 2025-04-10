@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  api-ceyla:
+    container_name: api_ceyla
+    image: pm44019/api-ceyla:v1
+    build:
+      context: .
+      dockerfile: api_ceyla/Dockerfile
+    depends_on:
+      - db-mysql-ceyla
+  
+  db-mysql-ceyla:
+    image: mysql:latest
+    restart: always

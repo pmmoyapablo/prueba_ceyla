@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  api-ceyla:
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_NAME=Ceyla
+      - DB_HOST=db-mysql-ceyla
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=adminMysqlser_dev.123
+      - ADAPTER=mysql
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    #command: npm run dev
+    networks:
+        - ceyla-network
+
+  db-mysql-ceyla:
+    environment:
+      MYSQL_ROOT_PASSWORD: 'adminMysqlser_dev.123'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db-ceyla:/var/lib/mysql
+    networks:
+        - ceyla-network
+  
+volumes:
+  my-db-ceyla:
+    
+networks:
+  ceyla-network:
+    driver: bridge
