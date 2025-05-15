@@ -4,18 +4,21 @@ export class EquipoCosto {
   public fecha: Date;
   public descripcion: string;
   public valor: number;
+  public tipo: 'MANTENIMIENTO' | 'ARREGLO';
 
   constructor(
     id: number,
     equipo_id: number,
     fecha: Date,
     descripcion: string,
-    valor: number
+    valor: number,
+    tipo: 'MANTENIMIENTO' | 'ARREGLO'
   ) {
     this.id = id;
     this.equipo_id = equipo_id;
     this.fecha = fecha;
     this.descripcion = descripcion;
     this.valor = valor;
+    this.tipo = tipo;
   }
 } 

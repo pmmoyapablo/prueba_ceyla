@@ -14,44 +14,43 @@ const RepositoryBaseDummie_1 = require("./RepositoryBaseDummie");
 class EquipoRepositoryDummie extends RepositoryBaseDummie_1.RepositoryBaseDummie {
     constructor() {
         super();
-        // Datos hardcodeados para pruebas
         this.equipos = [
             {
                 id: 1,
-                serial: 'SN-001-2023',
-                referencia: 'Laptop Dell XPS 13',
-                valor_compra: 4500000
+                serial: "EQ001",
+                referencia: "Laptop HP",
+                valor_compra: 2500000
             },
             {
                 id: 2,
-                serial: 'SN-002-2023',
-                referencia: 'Laptop HP Spectre x360',
-                valor_compra: 3800000
+                serial: "EQ002",
+                referencia: "Desktop Dell",
+                valor_compra: 1800000
             },
             {
                 id: 3,
-                serial: 'SN-003-2023',
-                referencia: 'MacBook Pro M1',
-                valor_compra: 5200000
-            },
-            {
-                id: 4,
-                serial: 'SN-004-2023',
-                referencia: 'Servidor Dell PowerEdge',
-                valor_compra: 12000000
+                serial: "EQ003",
+                referencia: "Monitor LG",
+                valor_compra: 800000
             }
         ];
-    }
-    // Sobrescribir métodos de la clase base para usar datos hardcodeados
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.equipos;
-        });
     }
     findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const equipo = this.equipos.find(e => e.id === id);
             return equipo || null;
+        });
+    }
+    findAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.equipos;
+        });
+    }
+    create(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const newEquipo = Object.assign({ id: this.equipos.length + 1 }, data);
+            this.equipos.push(newEquipo);
+            return newEquipo;
         });
     }
     // Métodos específicos para Equipo

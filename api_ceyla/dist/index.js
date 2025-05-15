@@ -10,6 +10,7 @@ const ClienteRoutes_1 = __importDefault(require("./infrastructure/http/routes/Cl
 const NegocioRoutes_1 = __importDefault(require("./infrastructure/http/routes/NegocioRoutes"));
 const EquipoRoutes_1 = __importDefault(require("./infrastructure/http/routes/EquipoRoutes"));
 const FacturaRoutes_1 = __importDefault(require("./infrastructure/http/routes/FacturaRoutes"));
+const EquipocostoRoutes_1 = __importDefault(require("./infrastructure/http/routes/EquipocostoRoutes"));
 const swagger_1 = require("./infrastructure/config/swagger"); // Commented out since module not found
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -27,6 +28,7 @@ app.use('/api/clientes', ClienteRoutes_1.default);
 app.use('/api/negocios', NegocioRoutes_1.default);
 app.use('/api/equipos', EquipoRoutes_1.default);
 app.use('/api/facturas', FacturaRoutes_1.default);
+app.use('/api/equipo-costo', EquipocostoRoutes_1.default);
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

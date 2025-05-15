@@ -1,15 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const Injector_1 = require("../../injections/Injector");
-const NegocioService_1 = require("../../../application/services/NegocioService");
 const NegocioController_1 = require("../controllers/NegocioController");
+const NegocioService_1 = require("../../../application/services/NegocioService");
+const Injector_1 = require("@/infrastructure/injections/Injector");
 const router = (0, express_1.Router)();
 const injector = Injector_1.Injector.getInstance();
 const adapter = process.env.ADAPTER || 'mysql';
 injector.setAdapters(adapter);
+// Crear instancias de los repositorios
 const negocioRepository = injector.resolve('negocioRepository');
-const negocioService = new NegocioService_1.NegocioService(negocioRepository);
+const negocioEquipoRepository = injector.resolve('negocioEquipoRepository');
+const facturaRepository = injector.resolve('facturaRepository');
+const facturaDetalleRepository = injector.resolve('facturaDetalleRepository');
+// Crear instancia del servicio con todos los argumentos requeridos
+const negocioService = new NegocioService_1.NegocioService(negocioRepository, negocioEquipoRepository, facturaRepository, facturaDetalleRepository);
+// Crear instancia del controlador
 const negocioController = new NegocioController_1.NegocioController(negocioService);
 /**
  * @swagger
@@ -125,4 +131,6 @@ router.put('/:id', negocioController.updateNegocio.bind(negocioController));
  *         description: Negocio no encontrado
  */
 router.delete('/:id', negocioController.deleteNegocio.bind(negocioController));
+router.post('/with-equipos', negocioController.createNegocioWithEquipos.bind(negocioController));
+router.post('/generar-facturas', negocioController.generarFacturasMensuales.bind(negocioController));
 exports.default = router;

@@ -11,75 +11,97 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EquipoCostoRepositoryDummie = void 0;
 const RepositoryBaseDummie_1 = require("./RepositoryBaseDummie");
+const sequelize_1 = require("sequelize");
 class EquipoCostoRepositoryDummie extends RepositoryBaseDummie_1.RepositoryBaseDummie {
     constructor() {
         super();
-        // Datos hardcodeados para pruebas
-        this.equipoCostos = [
+        this.equiposCostos = [
             {
                 id: 1,
                 equipo_id: 1,
-                fecha: new Date('2023-01-10'),
-                descripcion: 'Mantenimiento preventivo',
-                valor: 150000
+                fecha: new Date('2024-03-15'),
+                descripcion: 'Cambio de teclado',
+                valor: 150000,
+                tipo: 'ARREGLO'
             },
             {
                 id: 2,
                 equipo_id: 1,
-                fecha: new Date('2023-06-15'),
-                descripcion: 'Actualización de software',
-                valor: 80000
+                fecha: new Date('2024-03-01'),
+                descripcion: 'Limpieza general',
+                valor: 80000,
+                tipo: 'MANTENIMIENTO'
             },
             {
                 id: 3,
                 equipo_id: 2,
-                fecha: new Date('2023-02-05'),
-                descripcion: 'Cambio de batería',
-                valor: 350000
+                fecha: new Date('2024-03-10'),
+                descripcion: 'Cambio de disco duro',
+                valor: 350000,
+                tipo: 'ARREGLO'
             },
             {
                 id: 4,
-                equipo_id: 3,
-                fecha: new Date('2023-03-20'),
-                descripcion: 'Ampliación de memoria RAM',
-                valor: 420000
+                equipo_id: 2,
+                fecha: new Date('2024-03-05'),
+                descripcion: 'Mantenimiento preventivo',
+                valor: 420000,
+                tipo: 'MANTENIMIENTO'
             },
             {
                 id: 5,
-                equipo_id: 4,
-                fecha: new Date('2023-01-25'),
-                descripcion: 'Actualización de servidor',
-                valor: 1500000
+                equipo_id: 3,
+                fecha: new Date('2024-03-20'),
+                descripcion: 'Cambio de pantalla',
+                valor: 1500000,
+                tipo: 'ARREGLO'
             }
         ];
     }
-    // Sobrescribir métodos de la clase base para usar datos hardcodeados
-    findAll() {
+    findAll(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.equipoCostos;
+            if (options === null || options === void 0 ? void 0 : options.where) {
+                return this.equiposCostos.filter(costo => {
+                    return Object.entries(options.where).every(([key, value]) => {
+                        if (key === 'fecha' && value[sequelize_1.Op.between]) {
+                            const [inicio, fin] = value[sequelize_1.Op.between];
+                            return costo.fecha >= inicio && costo.fecha <= fin;
+                        }
+                        return costo[key] === value;
+                    });
+                });
+            }
+            return this.equiposCostos;
         });
     }
     findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const costo = this.equipoCostos.find(c => c.id === id);
+            const costo = this.equiposCostos.find(c => c.id === id);
             return costo || null;
         });
     }
     // Métodos específicos para EquipoCosto
     findByEquipoId(equipoId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.equipoCostos.filter(c => c.equipo_id === equipoId);
+            return this.equiposCostos.filter(c => c.equipo_id === equipoId);
         });
     }
     findByDateRange(fechaInicio, fechaFin) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.equipoCostos.filter(c => c.fecha >= fechaInicio && c.fecha <= fechaFin);
+            return this.equiposCostos.filter(c => c.fecha >= fechaInicio && c.fecha <= fechaFin);
         });
     }
     getTotalCostosPorEquipo(equipoId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const costos = this.equipoCostos.filter(c => c.equipo_id === equipoId);
+            const costos = this.equiposCostos.filter(c => c.equipo_id === equipoId);
             return costos.reduce((total, costo) => total + costo.valor, 0);
+        });
+    }
+    create(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const newCosto = Object.assign({ id: this.equiposCostos.length + 1 }, data);
+            this.equiposCostos.push(newCosto);
+            return newCosto;
         });
     }
 }

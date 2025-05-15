@@ -74,5 +74,46 @@ class NegocioController {
             }
         });
     }
+    createNegocioWithEquipos(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const dto = req.body;
+                const result = yield this.negocioService.createNegocioWithEquipos(dto);
+                if (result.success) {
+                    res.status(201).json(result);
+                }
+                else {
+                    res.status(400).json(result);
+                }
+            }
+            catch (error) {
+                res.status(500).json({
+                    success: false,
+                    message: 'Error interno del servidor',
+                    data: null
+                });
+            }
+        });
+    }
+    generarFacturasMensuales(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this.negocioService.generarFacturasMensuales();
+                if (result.success) {
+                    res.status(200).json(result);
+                }
+                else {
+                    res.status(400).json(result);
+                }
+            }
+            catch (error) {
+                res.status(500).json({
+                    success: false,
+                    message: 'Error interno del servidor',
+                    data: null
+                });
+            }
+        });
+    }
 }
 exports.NegocioController = NegocioController;

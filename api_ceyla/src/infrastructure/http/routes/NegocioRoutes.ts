@@ -1,15 +1,31 @@
 import { Router } from 'express';
-import { Injector } from '../../injections/Injector';
-import { INegocioRepository } from '../../../domain/repositories/INegocioRepository';
-import { NegocioService } from '../../../application/services/NegocioService';
 import { NegocioController } from '../controllers/NegocioController';
+import { NegocioService } from '../../../application/services/NegocioService';
+import { Injector } from '@/infrastructure/injections/Injector';
+import { INegocioRepository } from '@/domain/repositories/INegocioRepository';
+import { INegocioEquipoRepository } from '@/domain/repositories/INegocioEquipoRepository';
+import { IFacturaRepository } from '@/domain/repositories/IFacturaRepository';
+import { IFacturaDetalleRepository } from '@/domain/repositories/IFacturaDetalleRepository';
 
 const router = Router();
 const injector = Injector.getInstance();
 const adapter = process.env.ADAPTER || 'mysql';
 injector.setAdapters(adapter);
+// Crear instancias de los repositorios
 const negocioRepository = injector.resolve<INegocioRepository>('negocioRepository');
-const negocioService = new NegocioService(negocioRepository);
+const negocioEquipoRepository = injector.resolve<INegocioEquipoRepository>('negocioEquipoRepository');
+const facturaRepository = injector.resolve<IFacturaRepository>('facturaRepository');
+const facturaDetalleRepository = injector.resolve<IFacturaDetalleRepository>('facturaDetalleRepository');
+
+// Crear instancia del servicio con todos los argumentos requeridos
+const negocioService = new NegocioService(
+  negocioRepository,
+  negocioEquipoRepository,
+  facturaRepository,
+  facturaDetalleRepository
+);
+
+// Crear instancia del controlador
 const negocioController = new NegocioController(negocioService);
 
 /**
@@ -130,5 +146,8 @@ router.put('/:id', negocioController.updateNegocio.bind(negocioController));
  *         description: Negocio no encontrado
  */
 router.delete('/:id', negocioController.deleteNegocio.bind(negocioController));
+
+router.post('/with-equipos', negocioController.createNegocioWithEquipos.bind(negocioController));
+router.post('/generar-facturas', negocioController.generarFacturasMensuales.bind(negocioController));
 
 export default router; 
